@@ -1,0 +1,35 @@
+{
+  "debate_id": "open-source-deploy-tool",
+  "question": "Should we open-source our internal deployment tool?",
+  "created": "2026-03-20T10:00:00Z",
+  "status": "completed",
+  "rounds": 1,
+  "agents": [
+    {
+      "id": "strategist",
+      "role": "Strategy Lead",
+      "perspective": "Business strategy, market positioning, talent acquisition",
+      "bias": "pro-open-source",
+      "assigned_duties": ["pitch"]
+    },
+    {
+      "id": "engineer",
+      "role": "Principal Engineer",
+      "perspective": "Engineering capacity, maintenance burden, code quality",
+      "bias": "neutral-skeptical",
+      "assigned_duties": ["critique"]
+    },
+    {
+      "id": "finance",
+      "role": "VP Finance",
+      "perspective": "Revenue protection, competitive moat, cost analysis",
+      "bias": "risk-averse",
+      "assigned_duties": ["devils-advocate"]
+    }
+  ],
+  "config": {
+    "critique_threshold": 0.7,
+    "require_fatal_flaw": true,
+    "consensus_requires": "all-agents"
+  }
+}

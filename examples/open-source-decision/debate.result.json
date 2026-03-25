@@ -1,0 +1,72 @@
+{
+  "debate_id": "open-source-deploy-tool",
+  "status": "completed",
+  "completed_at": "2026-03-20T14:30:00Z",
+  "question": "Should we open-source our internal deployment tool?",
+  "outcome": "conditional-yes",
+  "confidence": 0.72,
+  "rounds_completed": 1,
+  "consensus": {
+    "reached": true,
+    "type": "conditional",
+    "summary": "Open-source the deployment framework after shipping Cloud beta. Keep ML scoring model proprietary. Requires 2 FTE and 4-month prep.",
+    "conditions": [
+      "Platform layer must represent >50% of KubeDeploy Cloud value",
+      "2 FTE secured for community maintenance before launch",
+      "KubeDeploy Cloud beta ships before or simultaneously with OSS release",
+      "Plugin architecture completed to isolate contribution surface"
+    ]
+  },
+  "key_insight": "Sequence matters more than the decision. Ship hosted version BEFORE open-sourcing to establish revenue position and neutralize fork risk.",
+  "agents": {
+    "strategist": {
+      "initial_position": "strongly-for",
+      "final_position": "conditionally-for",
+      "confidence_shift": { "from": 0.75, "to": 0.70 },
+      "concessions": [
+        "Accepted 2 FTE requirement (was 1)",
+        "Accepted 4-month timeline (was 2)",
+        "Accepted Cloud-first sequencing"
+      ]
+    },
+    "engineer": {
+      "initial_position": "against-without-resources",
+      "final_position": "conditionally-for",
+      "confidence_shift": { "from": 0.40, "to": 0.65 },
+      "fatal_flaw_raised": "40% of engineer time consumed by community PRs with insufficient staffing",
+      "fatal_flaw_resolved": true,
+      "resolution": "2 FTE + strict acceptance policy + plugin-only external features"
+    },
+    "finance": {
+      "initial_position": "against",
+      "final_position": "conditionally-for",
+      "confidence_shift": { "from": 0.30, "to": 0.55 },
+      "devils_advocate_scenario": "Competitor forks and ships hosted version in 2 weeks",
+      "resolution": "Cloud-first sequencing + proprietary ML scoring model"
+    }
+  },
+  "risk_matrix": [
+    { "risk": "Competitor fork", "probability": "medium", "impact": "high", "mitigated": true },
+    { "risk": "Maintenance overload", "probability": "high", "impact": "medium", "mitigated": true },
+    { "risk": "No community traction", "probability": "low", "impact": "medium", "mitigated": true },
+    { "risk": "Team morale from OSS toil", "probability": "medium", "impact": "high", "mitigated": true }
+  ],
+  "decision_framework": {
+    "gate": "Value split audit: core vs platform",
+    "proceed_if": ">50% value in platform layer",
+    "abort_if": ">50% value in core code",
+    "sequence": [
+      "Secure 2 FTE",
+      "Build plugin architecture",
+      "Ship Cloud beta",
+      "Open-source core at KubeCon",
+      "6-month review"
+    ]
+  },
+  "next_actions": [
+    "PM conducts value-split audit (1 week)",
+    "Engineering scopes plugin architecture (2 weeks)",
+    "Finance models Cloud pricing with OSS funnel",
+    "Revisit decision with audit data in 2 weeks"
+  ]
+}
