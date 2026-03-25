@@ -2,7 +2,7 @@
 
 ### Stop satisfying decisions. Start surviving them.
 
-You're about to make a big call — rewrite the backend, raise a round, kill a product line. You ask AI for advice. It says "great idea!" You ask your team. Nobody wants to be the one to disagree. You ask a consultant. $500K and 6 weeks later, you get a PowerPoint.
+You're about to make a big call — rewrite the backend, raise a round, kill a product line. You ask AI for advice. It says "great idea!" You ask your team. Nobody wants to be the one to disagree.
 
 **debate-protocol** makes AI agents **fight each other** over your decision. Mandatory fatal flaws. Forced devil's advocate. A groupthink alarm that fires when everyone suspiciously agrees. The output isn't validation — it's a stress test.
 
