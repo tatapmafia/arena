@@ -80,7 +80,24 @@ mkdir -p "$WORKSPACE"/{01-initial,02-rounds,03-revised,05-final}
 
 Problem statement, context, constraints. This is shared context for all agents. Include relevant data, links, background.
 
-**0.5 Collect initial conclusions**
+**0.5 Discovery Interview (MANDATORY)**
+
+Before launching agents, interview the user. Agents cannot ask the user questions — only YOU can. Get the context they'll need:
+
+```
+1. "What context do the agents NEED to know that isn't obvious from the question?"
+   (industry specifics, team size, budget, past attempts, constraints)
+
+2. "What assumptions should agents NOT make?"
+   (e.g., "we can't hire — budget is frozen", "we already tried X and it failed")
+
+3. "What hard data do you have that agents should use instead of guessing?"
+   (actual numbers, metrics, timelines, costs)
+```
+
+Append answers to `00-brief.md` under a `## User Context` section. This grounds the debate in reality.
+
+**0.6 Collect initial conclusions**
 
 Launch all agents in parallel using the Agent tool (with `run_in_background: true`):
 
@@ -92,7 +109,7 @@ Each agent prompt (from `./templates/debater-prompt.md`):
 
 Wait for all agents to complete. Read their initial conclusions.
 
-**0.6 Define pitch order and devil's advocate rotation**
+**0.7 Define pitch order and devil's advocate rotation**
 
 Default order: as listed in config. For DA rotation: assign the agent whose initial conclusion MOST contradicts the pitcher. Each agent serves as DA exactly once.
 
@@ -172,7 +189,34 @@ Read the rebuttal. Verify:
 
 If incomplete: re-launch the agent with specific instruction to address the gap.
 
-**Before each round:** `mkdir -p "$WORKSPACE/02-rounds/round-{N}-{role}"`
+**Calibrated critique check:** If ALL critics marked their Fatal Flaw as SPECULATIVE with confidence < 5 → the pitcher's position is strong. Note this in synthesis.
+
+#### Step 5: User Checkpoint (after each round)
+
+Collect all UNVERIFIED assumptions from this round's pitch + critiques. Present to the user:
+
+```
+Agents made these assumptions in Round {N}:
+- [UNVERIFIED] "{assumption 1}" (from {role})
+- [UNVERIFIED] "{assumption 2}" (from {role})
+
+Which are correct? Which are wrong? Anything to add?
+```
+
+Write user's corrections to `{workspace}/corrections/round-{N}.md`:
+```markdown
+# User Corrections — Round {N}
+## Confirmed
+- {assumption} — confirmed
+## Corrected
+- {assumption} — WRONG. Actual: {user's correction}
+## New Context
+- {anything user wants to add}
+```
+
+Instruct agents in the NEXT round: "Read {workspace}/corrections/round-{N}.md before writing."
+
+**Before each round:** `mkdir -p "$WORKSPACE/02-rounds/round-{N}-{role}" "$WORKSPACE/corrections"`
 
 ---
 

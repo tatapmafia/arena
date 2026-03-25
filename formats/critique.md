@@ -11,6 +11,15 @@
 FORBIDDEN: "I generally agree", "minor concern", "small nuance".
 This MUST be a problem that could collapse the entire thesis.}
 
+**Evidence basis:** {OBSERVED | INFERRED | SPECULATIVE}
+- OBSERVED = based on data/facts from the brief or user context
+- INFERRED = logical deduction from known facts
+- SPECULATIVE = no data available, this is a concern based on general knowledge
+
+**Confidence: {1-10}**
+{If confidence < 5, state: "This is a weak flaw — I could not find a strong
+fatal flaw, which may indicate the position is actually solid."}
+
 ## Missing Evidence
 {What data is needed to confirm or refute the thesis.
 Specific metrics, research, benchmarks the author did not provide.}
@@ -21,6 +30,10 @@ With numbers and timeline if possible.}
 
 ## Constructive Alternative
 {How to strengthen the author's position by addressing the fatal flaw. Not "instead of" but "together with".}
+
+## Assumptions Requiring Verification
+- [VERIFIED] {fact from brief}
+- [UNVERIFIED] {assumption you're making}
 ```
 
 ## Devil's Advocate Mode (added to format when assigned)

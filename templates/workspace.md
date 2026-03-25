@@ -21,6 +21,9 @@ Create this directory tree at the workspace path:
 ├── 03-revised/                          # Post-debate revised conclusions
 │   ├── {role-1}.md
 │   └── {role-N}.md
+├── corrections/                          # User fact-checks between rounds
+│   ├── round-1.md                       # Confirmed/Corrected/New context
+│   └── round-N.md
 ├── 04-synthesis.md                      # Facilitator's synthesis
 ├── 05-final/                            # Final conclusions
 │   ├── {role-1}.md

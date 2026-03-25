@@ -27,6 +27,11 @@ My position could be wrong if:
 - {Assumption 1 — what I take as given}
 - {Assumption 2}
 
+## Assumptions Requiring Verification (MANDATORY)
+- [VERIFIED] {fact from 00-brief.md — cite the section}
+- [UNVERIFIED] {assumption you're making about the business/context}
+- [UNVERIFIED] {another assumption}
+
 ## Confidence: {1-10}
 {Why this confidence level. What would raise or lower it.}
 ```
