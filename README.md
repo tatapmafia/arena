@@ -73,11 +73,11 @@ If the cost of being wrong is low, just decide. If the cost is high — **make t
 
 ```bash
 # Copy to your Claude Code skills directory
-git clone https://github.com/anthropics/debate-protocol.git
+git clone https://github.com/tatapmafia/arena.git
 cp -r debate-protocol ~/.claude/skills/debate-protocol
 
 # Or if you prefer a one-liner
-git clone https://github.com/anthropics/debate-protocol.git ~/.claude/skills/debate-protocol
+git clone https://github.com/tatapmafia/arena.git ~/.claude/skills/debate-protocol
 ```
 
 Requires: [Claude Code](https://claude.ai/claude-code)
