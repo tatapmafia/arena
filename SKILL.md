@@ -1,7 +1,7 @@
 ---
 name: debate
 description: "Structured adversarial debate between AI agents. Forces disagreement, mandatory fatal flaws, devil's advocate rotation. Produces decision-quality consensus documents. Use when 3+ experts need to stress-test a decision."
-version: 2.0.0
+version: 2.1.0
 ---
 
 # debate-protocol
@@ -23,9 +23,21 @@ Structured adversarial debate between 3-5 AI agents. Each defends their position
 
 ```
 /debate "Should we rewrite our auth system?"
+/debate --quick "Redis or Memcached?"
 /debate --preset architecture "Monolith or microservices?"
-/debate --preset risk-assessment "Should we raise Series A now?"
+/debate --strategy red-team "We should migrate to Kubernetes"
+/debate --no-judge "Low-stakes question"
 ```
+
+## Strategies
+
+| Strategy | Flow | Time | Best for |
+|----------|------|------|----------|
+| `adversarial` (default) | Pitch rounds → Judge → Revised → Synthesis → Consensus | ~20-40 min | High-stakes, multi-option decisions |
+| `quick` | Initial analysis → Cross-critique → Synthesis → Consensus | ~5 min | Quick decisions, exploration |
+| `red-team` | Defense → Sequential attacks → Rebuttal → Judge → Consensus | ~15-25 min | Stress-test a specific proposal |
+
+Strategy files: `./strategies/`. Custom strategies: drop a `.md` file there.
 
 ## Presets
 
@@ -37,9 +49,27 @@ Structured adversarial debate between 3-5 AI agents. Each defends their position
 
 Custom presets: drop a `.md` file in `presets/`. See existing presets for format.
 
+## Multi-Model Support
+
+Optionally specify `provider` and `model` per agent in `debate.config.json`:
+```json
+{"role": "optimist", "provider": "claude", "model": "opus"}
+{"role": "pessimist", "provider": "openai", "model": "gpt-4o"}
+```
+Currently only Claude is supported via Agent tool. Config is ready for any provider — adapters can be added later.
+
 ---
 
 ## Execution Flow
+
+### Strategy Loading
+
+Read the strategy file from `./strategies/{strategy}.md` (default: `adversarial`).
+The strategy defines: phases, min/max agents, whether judge is enabled.
+Follow the strategy's phase sequence — do NOT hardcode phases.
+
+For `--quick`: load `./strategies/quick.md` and follow its simplified flow.
+For `--strategy red-team`: load `./strategies/red-team.md`.
 
 ### Phase 0: Setup
 
@@ -220,9 +250,32 @@ Instruct agents in the NEXT round: "Read {workspace}/corrections/round-{N}.md be
 
 ---
 
+### Phase 1.5: Judge Evaluation (if strategy.judge = true)
+
+Unless `--no-judge` was specified, launch a separate Judge agent after all pitch rounds:
+
+```
+You are the JUDGE. You did NOT participate in the debate. You OBSERVE and ASSESS.
+
+Read ALL artifacts in {workspace}:
+- All pitches, critiques, rebuttals in 02-rounds/
+- All corrections in corrections/
+
+Write your evaluation to: {workspace}/judge-report.md
+
+Format: follow ./formats/judge-report.md EXACTLY.
+Evaluate: argument quality, evidence strength, intellectual honesty per agent.
+Identify: strongest arguments that survived, weakest that collapsed.
+Score: overall debate quality 1-10.
+```
+
+The facilitator uses the judge report in Phase 3 (Synthesis).
+
+---
+
 ### Phase 2: Revised Conclusions
 
-After ALL pitch rounds complete. Launch all agents in parallel:
+After ALL pitch rounds (and judge evaluation) complete. Launch all agents in parallel:
 
 ```
 The debate rounds are complete. Time to revise your position.
@@ -334,6 +387,18 @@ Read all final conclusions. Write `{workspace}/05-final/consensus.md`:
 
 ## Key Insight from Debate Process (optional)
 {What emerged ONLY because of adversarial debate — would not have surfaced in solo analysis}
+
+## Argument Graph
+{ASCII visualization of the debate flow. Auto-detect language from 00-brief.md.
+Generate one tree per round showing: who pitched, who attacked, what was accepted/rejected.}
+
+Example:
+ROUND 1: {pitcher} pitches
+├── {critic} ──FATAL FLAW──▶ "{flaw summary}" [{evidence_basis}, {confidence}/10]
+│   └── {pitcher} rebuttal: {ACCEPTED|REJECTED} — {brief reason}
+├── {critic} ──FATAL FLAW──▶ "{flaw}" [{basis}, {conf}/10] ★DA
+│   └── {pitcher} rebuttal: {ACCEPTED|REJECTED} — {reason}
+└── UPDATED THESIS: {new thesis after rebuttals}
 
 ---
 *Generated with [debate-protocol](https://github.com/anthropics/debate-protocol)*

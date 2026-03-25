@@ -17,7 +17,8 @@
         "completed_at": {"type": "string", "format": "date-time"},
         "agent_count": {"type": "integer", "minimum": 3},
         "round_count": {"type": "integer", "minimum": 1},
-        "workspace": {"type": "string", "description": "Path to debate workspace directory"}
+        "workspace": {"type": "string", "description": "Path to debate workspace directory"},
+        "judge_enabled": {"type": "boolean", "description": "Whether judge evaluation was used"}
       }
     },
     "agents": {
@@ -29,6 +30,8 @@
         "properties": {
           "role": {"type": "string"},
           "description": {"type": "string"},
+          "provider": {"type": "string", "description": "LLM provider (claude, openai, etc.)"},
+          "model": {"type": "string", "description": "Model identifier (opus, sonnet, gpt-4o, etc.)"},
           "initial_position": {"type": "string"},
           "final_position": {"type": "string"},
           "confidence_trajectory": {
@@ -121,6 +124,29 @@
         "fatal_flaws_accepted": {"type": "integer"},
         "groupthink_flag": {"type": "boolean"},
         "average_final_confidence": {"type": "number"}
+      }
+    },
+    "judge_report": {
+      "type": "object",
+      "description": "Judge evaluation (present when judge is enabled)",
+      "properties": {
+        "debate_quality_score": {"type": "number", "minimum": 1, "maximum": 10},
+        "agent_scores": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": {"type": "string"},
+              "argument_quality": {"type": "number", "minimum": 1, "maximum": 10},
+              "evidence_strength": {"type": "number", "minimum": 1, "maximum": 10},
+              "intellectual_honesty": {"type": "number", "minimum": 1, "maximum": 10},
+              "key_contribution": {"type": "string"}
+            }
+          }
+        },
+        "strongest_arguments": {"type": "array", "items": {"type": "string"}},
+        "weakest_arguments": {"type": "array", "items": {"type": "string"}},
+        "groupthink_assessment": {"type": "string"}
       }
     }
   }

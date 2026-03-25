@@ -85,14 +85,32 @@ Requires: [Claude Code](https://claude.ai/claude-code)
 ## Usage
 
 ```bash
-# Basic — define your own agents interactively
+# Standard debate (full adversarial protocol with judge)
 /debate "Should we rewrite our auth system?"
+
+# Quick mode — 5 minutes, cross-critique, no rounds
+/debate --quick "Redis or Memcached?"
 
 # With a preset — agents pre-configured for the decision type
 /debate --preset architecture "Monolith or microservices?"
 /debate --preset risk-assessment "Should we raise Series A now?"
-/debate --preset go-to-market "Freemium or paid-only?"
+
+# Red team — stress-test a specific proposal
+/debate --strategy red-team "We should migrate to Kubernetes"
+
+# Disable judge for faster runs
+/debate --no-judge "Low-stakes question"
 ```
+
+## Strategies
+
+| Strategy | How it works | Time | Best for |
+|----------|-------------|------|----------|
+| **adversarial** (default) | Each agent pitches → others attack → rebuttal → judge → synthesis | ~20-40 min | High-stakes, multi-option |
+| **quick** | Everyone analyzes → cross-critique in parallel → synthesis | ~5 min | Quick decisions, exploration |
+| **red-team** | One defends → others attack sequentially → rebuttal → judge | ~15-25 min | Go/no-go, stress-test a plan |
+
+Custom strategies: drop a `.md` file in `strategies/`.
 
 ## How It Works
 
@@ -169,12 +187,17 @@ Actual cost depends on brief length, evidence depth, and model used.
 debate-protocol/
 ├── SKILL.md                 # Core protocol (facilitator instructions)
 ├── debate.schema.json       # JSON schema for structured output
+├── strategies/              # Debate flow strategies
+│   ├── adversarial.md       # Full debate (default)
+│   ├── quick.md             # Fast cross-critique (~5 min)
+│   └── red-team.md          # 1 defender vs N attackers
 ├── formats/                 # Document format templates
 │   ├── pitch.md             # Thesis + Evidence + Pre-mortem
 │   ├── critique.md          # Fatal Flaw + Counter-scenario
 │   ├── rebuttal.md          # Accept/Defend + Updated Thesis
 │   ├── revised.md           # Agreement Map + Confidence Trajectory
-│   └── final.md             # Evolution + Recommendations
+│   ├── final.md             # Evolution + Recommendations
+│   └── judge-report.md      # Judge evaluation of debate quality
 ├── presets/                 # Pre-configured agent sets
 │   ├── architecture.md
 │   ├── go-to-market.md
@@ -196,9 +219,9 @@ debate-protocol/
 
 ## Roadmap
 
-- **v2.0** (current) — Standalone mode, JSON output, presets, English-first
-- **v2.1** — Plugin strategies (red-team, dialectic, delphi), debate comparison tool
-- **v3.0** — Multi-model debates (Claude vs GPT vs Gemini), GitHub Action integration
+- **v2.1** (current) — Strategies (quick/adversarial/red-team), Judge agent, Argument Graph, multi-model config, human-in-the-loop
+- **v2.2** — More strategies (dialectic, delphi), debate comparison tool, community presets
+- **v3.0** — Multi-vendor model support (Claude + GPT + Gemini adapters), GitHub Action integration
 
 ## License
 
